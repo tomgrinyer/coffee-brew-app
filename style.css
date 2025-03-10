@@ -1,12 +1,15 @@
+/* Use a basic sans-serif font (like Arial) */
 body {
   font-family: Arial, sans-serif;
   margin: 20px;
 }
 
+/* Basic headings */
 h1, h2 {
   margin-bottom: 10px;
 }
 
+/* Labels and inputs */
 label {
   display: inline-block;
   width: 100px;
@@ -17,7 +20,17 @@ input[type="number"] {
   margin-right: 20px;
 }
 
+/* Timer display styling */
 #timer-display {
   font-size: 2rem;
   margin: 10px 0;
+}
+
+/* Classes for phase highlighting and completion */
+.active-phase {
+  font-weight: bold;
+}
+
+.completed-phase {
+  text-decoration: line-through;
 }

@@ -5,10 +5,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const coffeeInput = document.getElementById('coffee-input');
   const waterInput = document.getElementById('water-input');
 
+  // For the three-pour breakdown
   const bloomAmount = document.getElementById('bloom-amount');
   const pour1Amount = document.getElementById('pour1-amount');
   const pour2Amount = document.getElementById('pour2-amount');
 
+  // For styling each line of breakdown
+  const bloomLine = document.getElementById('bloom-line');
+  const pour1Line = document.getElementById('pour1-line');
+  const pour2Line = document.getElementById('pour2-line');
+  const drawdownLine = document.getElementById('drawdown-line');
+
+  // Ratio: 60 g coffee : 1000 g water => ~16.6667
   const waterPerCoffee = 1000 / 60;
 
   function updateWaterBreakdown(totalWater) {
@@ -67,9 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const stopBtn = document.getElementById('stop-btn');
   const resetBtn = document.getElementById('reset-btn');
 
-  // New: phase indicator element
-  const phaseIndicator = document.getElementById('phase-indicator');
-
   function updateTimerDisplay(time) {
     const minutes = Math.floor(time / 60000);
     const seconds = Math.floor((time % 60000) / 1000);
@@ -77,20 +82,40 @@ document.addEventListener('DOMContentLoaded', () => {
       `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   }
 
-  // New: update the phase based on elapsed seconds
-  function updatePhaseIndicator(elapsedSeconds) {
-    // 0 to <45  => Bloom
-    // 45 to <75 => Pour 1
-    // 75 to <105 => Pour 2
-    // >=105 => Draw Down
+  // Update the pour phases' styles based on elapsed seconds
+  function updatePhaseStyles(elapsedSeconds) {
+    // Reset all lines to default
+    [bloomLine, pour1Line, pour2Line, drawdownLine].forEach(line => {
+      line.classList.remove('active-phase', 'completed-phase');
+    });
+
+    // 
+    // Timings:
+    // 0–44s: Bloom is active
+    // 45–74s: Bloom completed, Pour 1 active
+    // 75–104s: Bloom & Pour 1 completed, Pour 2 active
+    // >=105s: Bloom, Pour 1, Pour 2 completed, Draw Down active
+    //
     if (elapsedSeconds < 45) {
-      phaseIndicator.textContent = 'Bloom Phase';
+      bloomLine.classList.add('active-phase');
     } else if (elapsedSeconds < 75) {
-      phaseIndicator.textContent = 'Pour 1';
+      // Bloom is completed
+      bloomLine.classList.add('completed-phase');
+      // Pour 1 is active
+      pour1Line.classList.add('active-phase');
     } else if (elapsedSeconds < 105) {
-      phaseIndicator.textContent = 'Pour 2';
+      // Bloom & Pour 1 completed
+      bloomLine.classList.add('completed-phase');
+      pour1Line.classList.add('completed-phase');
+      // Pour 2 is active
+      pour2Line.classList.add('active-phase');
     } else {
-      phaseIndicator.textContent = 'Draw Down';
+      // Bloom, Pour 1, Pour 2 completed
+      bloomLine.classList.add('completed-phase');
+      pour1Line.classList.add('completed-phase');
+      pour2Line.classList.add('completed-phase');
+      // Draw Down is active
+      drawdownLine.classList.add('active-phase');
     }
   }
 
@@ -101,9 +126,8 @@ document.addEventListener('DOMContentLoaded', () => {
         elapsedTime = Date.now() - startTime;
         updateTimerDisplay(elapsedTime);
 
-        // Call updatePhaseIndicator with total elapsed seconds
         const elapsedSeconds = Math.floor(elapsedTime / 1000);
-        updatePhaseIndicator(elapsedSeconds);
+        updatePhaseStyles(elapsedSeconds);
       }, 100);
     }
   });
@@ -120,6 +144,10 @@ document.addEventListener('DOMContentLoaded', () => {
     timerInterval = null;
     elapsedTime = 0;
     updateTimerDisplay(elapsedTime);
-    phaseIndicator.textContent = ''; // Clear or reset the phase text
+
+    // Reset phases
+    [bloomLine, pour1Line, pour2Line, drawdownLine].forEach(line => {
+      line.classList.remove('active-phase', 'completed-phase');
+    });
   });
 });
