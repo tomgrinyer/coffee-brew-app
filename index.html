@@ -1,48 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8" />
-  <title>Coffee Brew Calculator & Timer</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <h1>Coffee Brew Calculator & Timer</h1>
+<section>
+  <h2>Timer</h2>
+  <div id="timer-display">00:00</div>
 
-  <!-- Coffee & Water Inputs -->
-  <section>
-    <label for="coffee-input">Coffee (g):</label>
-    <input
-      type="number"
-      id="coffee-input"
-      placeholder="Enter coffee amount"
-    />
+  <!-- New phase indicator -->
+  <div id="phase-indicator"></div>
 
-    <label for="water-input">Water (g):</label>
-    <input
-      type="number"
-      id="water-input"
-      placeholder="Enter water amount"
-    />
-  </section>
-
-  <!-- Three-Pour Breakdown -->
-  <section>
-    <h2>Pour Breakdown</h2>
-    <p>Bloom (12%): <span id="bloom-amount">0</span> g</p>
-    <p>Pour 1 (48%): <span id="pour1-amount">0</span> g</p>
-    <p>Pour 2 (40%): <span id="pour2-amount">0</span> g</p>
-  </section>
-
-  <!-- Timer Section -->
-  <section>
-    <h2>Timer</h2>
-    <div id="timer-display">00:00</div>
-
-    <button id="start-btn">Start</button>
-    <button id="stop-btn">Stop</button>
-    <button id="reset-btn">Reset</button>
-  </section>
-
-  <script src="script.js"></script>
-</body>
-</html>
+  <button id="start-btn">Start</button>
+  <button id="stop-btn">Stop</button>
+  <button id="reset-btn">Reset</button>
+</section>

@@ -5,26 +5,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const coffeeInput = document.getElementById('coffee-input');
   const waterInput = document.getElementById('water-input');
 
-  // For the three-pour breakdown
   const bloomAmount = document.getElementById('bloom-amount');
   const pour1Amount = document.getElementById('pour1-amount');
   const pour2Amount = document.getElementById('pour2-amount');
 
-  // Ratio: 60 g coffee : 1000 g water => ~16.6667
   const waterPerCoffee = 1000 / 60;
 
   function updateWaterBreakdown(totalWater) {
-    // If totalWater is valid, calculate bloom, pour1, pour2
     if (!isNaN(totalWater) && totalWater > 0) {
       const bloom = totalWater * 0.12;
       const pour1 = totalWater * 0.48;
       const pour2 = totalWater * 0.40;
 
-      bloomAmount.textContent = bloom.toFixed(1);  // One decimal
+      bloomAmount.textContent = bloom.toFixed(1);
       pour1Amount.textContent = pour1.toFixed(1);
       pour2Amount.textContent = pour2.toFixed(1);
     } else {
-      // Reset if invalid
       bloomAmount.textContent = 0;
       pour1Amount.textContent = 0;
       pour2Amount.textContent = 0;
@@ -37,8 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!isNaN(coffeeVal) && coffeeVal > 0) {
         const calculatedWater = coffeeVal * waterPerCoffee;
         waterInput.value = calculatedWater.toFixed(1);
-
-        // Update the three-pour breakdown
         updateWaterBreakdown(calculatedWater);
       } else {
         waterInput.value = '';
@@ -53,8 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!isNaN(waterVal) && waterVal > 0) {
         const calculatedCoffee = waterVal / waterPerCoffee;
         coffeeInput.value = calculatedCoffee.toFixed(1);
-
-        // Update the three-pour breakdown
         updateWaterBreakdown(waterVal);
       } else {
         coffeeInput.value = '';
@@ -75,12 +67,31 @@ document.addEventListener('DOMContentLoaded', () => {
   const stopBtn = document.getElementById('stop-btn');
   const resetBtn = document.getElementById('reset-btn');
 
+  // New: phase indicator element
+  const phaseIndicator = document.getElementById('phase-indicator');
+
   function updateTimerDisplay(time) {
     const minutes = Math.floor(time / 60000);
     const seconds = Math.floor((time % 60000) / 1000);
-
     timerDisplay.textContent =
       `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  }
+
+  // New: update the phase based on elapsed seconds
+  function updatePhaseIndicator(elapsedSeconds) {
+    // 0 to <45  => Bloom
+    // 45 to <75 => Pour 1
+    // 75 to <105 => Pour 2
+    // >=105 => Draw Down
+    if (elapsedSeconds < 45) {
+      phaseIndicator.textContent = 'Bloom Phase';
+    } else if (elapsedSeconds < 75) {
+      phaseIndicator.textContent = 'Pour 1';
+    } else if (elapsedSeconds < 105) {
+      phaseIndicator.textContent = 'Pour 2';
+    } else {
+      phaseIndicator.textContent = 'Draw Down';
+    }
   }
 
   startBtn.addEventListener('click', () => {
@@ -89,6 +100,10 @@ document.addEventListener('DOMContentLoaded', () => {
       timerInterval = setInterval(() => {
         elapsedTime = Date.now() - startTime;
         updateTimerDisplay(elapsedTime);
+
+        // Call updatePhaseIndicator with total elapsed seconds
+        const elapsedSeconds = Math.floor(elapsedTime / 1000);
+        updatePhaseIndicator(elapsedSeconds);
       }, 100);
     }
   });
@@ -105,5 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
     timerInterval = null;
     elapsedTime = 0;
     updateTimerDisplay(elapsedTime);
+    phaseIndicator.textContent = ''; // Clear or reset the phase text
   });
 });
