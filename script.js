@@ -15,17 +15,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const waterPerCoffee = 1000 / 60;
 
   function updateWaterBreakdown(totalWater) {
-    // If we have a valid, positive number, calculate the breakdown
     if (!isNaN(totalWater) && totalWater > 0) {
-      // Individual amounts
-      const bloom = totalWater * 0.12;  // 12%
+      // Individual amounts (bloom, pour1, pour2)
+      const bloom = totalWater * 0.12;   // 12%
       const pour1 = totalWater * 0.48;  // 48%
       const pour2 = totalWater * 0.40;  // 40%
 
-      // Cumulative amounts at each stage
-      const bloomCumulative = bloom;                 // Bloom only
-      const pour1Cumulative = bloom + pour1;         // Bloom + Pour 1
-      const pour2Cumulative = bloom + pour1 + pour2; // Bloom + Pour 1 + Pour 2
+      // Cumulative amounts
+      const bloomCumulative = bloom;
+      const pour1Cumulative = bloom + pour1;
+      const pour2Cumulative = bloom + pour1 + pour2;
 
       // Update each line to show the cumulative mass
       bloomLine.textContent = `Bloom (12%): ${bloomCumulative.toFixed(1)} g`;
@@ -41,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Coffee input listener
   coffeeInput.addEventListener('input', () => {
     if (document.activeElement === coffeeInput) {
       const coffeeVal = parseFloat(coffeeInput.value);
@@ -55,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Water input listener
   waterInput.addEventListener('input', () => {
     if (document.activeElement === waterInput) {
       const waterVal = parseFloat(waterInput.value);
@@ -95,6 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
       line.classList.remove('active-phase', 'completed-phase');
     });
 
+    // Timings:
     // 0–44s: Bloom is active
     // 45–74s: Bloom completed, Pour 1 active
     // 75–104s: Bloom & Pour 1 completed, Pour 2 active
@@ -146,5 +148,44 @@ document.addEventListener('DOMContentLoaded', () => {
     [bloomLine, pour1Line, pour2Line, drawdownLine].forEach(line => {
       line.classList.remove('active-phase', 'completed-phase');
     });
+  });
+
+  //
+  // ALWAYS ON TOGGLE (WAKE LOCK)
+  //
+  const keepAwakeToggle = document.getElementById('keep-awake-toggle');
+  let wakeLock = null;
+
+  async function requestWakeLock() {
+    try {
+      if ('wakeLock' in navigator) {
+        wakeLock = await navigator.wakeLock.request('screen');
+        wakeLock.addEventListener('release', () => {
+          console.log('Screen Wake Lock was released');
+        });
+        console.log('Wake Lock is active!');
+      } else {
+        console.warn('Screen Wake Lock API not supported in this browser.');
+      }
+    } catch (err) {
+      console.error(`${err.name}, ${err.message}`);
+    }
+  }
+
+  async function releaseWakeLock() {
+    if (wakeLock !== null) {
+      await wakeLock.release();
+      wakeLock = null;
+      console.log('Wake Lock released');
+    }
+  }
+
+  // Toggle the wake lock when the user checks/unchecks the box
+  keepAwakeToggle.addEventListener('change', async (e) => {
+    if (e.target.checked) {
+      await requestWakeLock();
+    } else {
+      await releaseWakeLock();
+    }
   });
 });

@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <title>Coffee Brew Calculator & Timer</title>
+  <!-- Link to your CSS file -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <h1>Coffee Brew Calculator & Timer</h1>
 
-  <!-- Coffee & Water Inputs -->
+  <!-- Coffee & Water Inputs (separate lines) -->
   <section class="inputs-section">
     <div class="field">
       <label for="coffee-input">Coffee (g):</label>
@@ -45,6 +46,12 @@
     <button id="start-btn">Start</button>
     <button id="stop-btn">Stop</button>
     <button id="reset-btn">Reset</button>
+
+    <!-- Always On Toggle -->
+    <div class="field">
+      <label for="keep-awake-toggle">Always On:</label>
+      <input type="checkbox" id="keep-awake-toggle" />
+    </div>
   </section>
 
   <!-- Link to your JavaScript file -->
