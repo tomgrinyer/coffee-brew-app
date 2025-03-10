@@ -9,26 +9,29 @@
   <h1>Coffee Brew Calculator & Timer</h1>
 
   <!-- Coffee & Water Inputs -->
-  <section>
-    <label for="coffee-input">Coffee (g):</label>
-    <input
-      type="number"
-      id="coffee-input"
-      placeholder="Enter coffee amount"
-    />
+  <section class="inputs-section">
+    <div class="field">
+      <label for="coffee-input">Coffee (g):</label>
+      <input
+        type="number"
+        id="coffee-input"
+        placeholder="Enter coffee amount"
+      />
+    </div>
 
-    <label for="water-input">Water (g):</label>
-    <input
-      type="number"
-      id="water-input"
-      placeholder="Enter water amount"
-    />
+    <div class="field">
+      <label for="water-input">Water (g):</label>
+      <input
+        type="number"
+        id="water-input"
+        placeholder="Enter water amount"
+      />
+    </div>
   </section>
 
   <!-- Four Stages: Bloom, Pour 1, Pour 2, Draw Down -->
   <section>
     <h2>Pour Breakdown</h2>
-    <!-- Each line will show the cumulative water used up to that point -->
     <p id="bloom-line">Bloom (12%): 0 g</p>
     <p id="pour1-line">Pour 1 (48%): 0 g</p>
     <p id="pour2-line">Pour 2 (40%): 0 g</p>
@@ -44,6 +47,7 @@
     <button id="reset-btn">Reset</button>
   </section>
 
+  <!-- Link to your JavaScript file -->
   <script src="script.js"></script>
 </body>
 </html>

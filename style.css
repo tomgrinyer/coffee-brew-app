@@ -4,20 +4,35 @@ body {
   margin: 20px;
 }
 
+/* Headings */
 h1, h2 {
   margin-bottom: 10px;
 }
 
-label {
-  display: inline-block;
-  width: 100px;
-  margin-top: 10px;
+/* Section for inputs */
+.inputs-section {
+  margin-bottom: 20px;
 }
 
+/* Each .field is a separate row for label + input */
+.field {
+  display: flex;
+  flex-direction: row; /* label and input in a row */
+  align-items: center;
+  margin-bottom: 1em;
+}
+
+.field label {
+  width: 100px; /* fixed label width for consistent alignment */
+}
+
+/* Inputs can grow or be constrained as needed */
 input[type="number"] {
-  margin-right: 20px;
+  margin-left: 10px;
+  max-width: 150px; /* you can adjust this if you want wider inputs */
 }
 
+/* Timer display styling */
 #timer-display {
   font-size: 2rem;
   margin: 10px 0;
